@@ -8,6 +8,11 @@ const exportname = "recording.webm";
 
 export
 const bootstrap = async () => {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const Xvfb = require('xvfb');
+  const xvfb = new Xvfb({silent: true, xvfb_args: ["-screen", "0", `${width}x${height}x24`, "-ac"],});
+  xvfb.startSync()
+
   const browser: Browser = await puppeteer.launch({headless: false, args: [
       '--enable-usermedia-screen-capturing',
       '--allow-http-screen-capture',
@@ -15,7 +20,7 @@ const bootstrap = async () => {
       '--load-extension=' + __dirname,
       '--disable-extensions-except=' + __dirname,
       '--disable-infobars',
-      '--force-device-scale-factor=1'
+      '--force-device-scale-factor=1',
     ]});
   const page: Page = (await browser.pages())[0];
 
@@ -28,9 +33,10 @@ const bootstrap = async () => {
 
   await page.evaluate(filename=>{
     window.postMessage({type: 'SET_EXPORT_PATH', filename: filename}, '*')
+
   }, exportname)
 
-  await page.waitFor(1500000);
+  await page.waitFor(15000);
 
   await page.evaluate(filename=>{
     window.postMessage({type: 'REC_STOP'}, '*')
@@ -38,6 +44,7 @@ const bootstrap = async () => {
 
   await page.waitForSelector('html.downloadComplete', {timeout: 0})
   await browser.close()
+  xvfb.stopSync()
 }
 
 bootstrap();
