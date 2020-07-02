@@ -16,7 +16,18 @@ const bootstrap = async () => {
   const browser: Browser = await puppeteer.launch({
     headless: false,
     defaultViewport: null,
-    args: ['--no-sandbox', '--start-fullscreen', '--display='+xvfb._display]
+    args: [
+      '--enable-usermedia-screen-capturing',
+      '--allow-http-screen-capture',
+      '--auto-select-desktop-capture-source=puppetcam',
+      '--load-extension=' + __dirname,
+      '--disable-extensions-except=' + __dirname,
+      '--disable-infobars',
+      '--force-device-scale-factor=1',
+      '--no-sandbox',
+      '--start-fullscreen',
+      '--display='+xvfb._display
+    ]
   });
   const page: Page = (await browser.pages())[0];
 
