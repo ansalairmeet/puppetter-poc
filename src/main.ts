@@ -39,7 +39,11 @@ const bootstrap = async () => {
   }, exportname)
 
   console.log(`Waiting for download to complete`);
-  await page.waitForSelector('html.downloadComplete', {timeout: 5000})
+  try {
+    await page.waitForSelector('html.downloadComplete', { timeout: 5000 })
+  }catch (e) {
+    console.log(e);
+  }
   console.log(`Wait for download Completed`);
   await page.screenshot({path: 'result.png'});
   await browser.close()
