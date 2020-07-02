@@ -32,13 +32,15 @@ const bootstrap = async () => {
 
   }, exportname)
 
-  await page.waitFor(15000);
+  await page.waitFor(10000);
 
   await page.evaluate(filename=>{
     window.postMessage({type: 'REC_STOP'}, '*')
   }, exportname)
 
-  await page.waitForSelector('html.downloadComplete', {timeout: 0})
+  console.log(`Waiting for download to complete`);
+  await page.waitForSelector('html.downloadComplete', {timeout: 5000})
+  console.log(`Wait for download Completed`);
   await page.screenshot({path: 'result.png'});
   await browser.close()
   xvfb.stopSync()
