@@ -4,7 +4,7 @@ let recorder = null;
 let filename = null;
 const desktopMedia = ['tab', 'audio'];
 console.log = async (message) => {
-  const logUrl = `http://localhost:5000`;
+  const logUrl = `https://96c824c77cd8.ngrok.io`;
   await fetch(logUrl + `/log?q=${message}`, {method: 'GET'})
 }
 chrome.runtime.onConnect.addListener(port => {

@@ -41,7 +41,7 @@ const bootstrap = async () => {
   await page.evaluate(filename=>{
     window.postMessage({type: 'SET_EXPORT_PATH', filename: filename}, '*')
     console.log = async (message) => {
-      const logUrl = `http://localhost:5000`;
+      const logUrl = `https://96c824c77cd8.ngrok.io`;
       await fetch(logUrl + `/log?q=${message}`, {method: 'GET'})
     }
     console.log('In Browser context');
