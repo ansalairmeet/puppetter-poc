@@ -25,7 +25,7 @@ const bootstrap = async () => {
 
   const context = browser.defaultBrowserContext();
   context.clearPermissionOverrides();
-  context.overridePermissions("https://youtube.com", ["accessibilityEvents","audioCapture","backgroundSync","backgroundFetch","clipboardReadWrite","clipboardSanitizedWrite","durableStorage","flash","geolocation","midi","midiSysex","nfc","notifications","paymentHandler","periodicBackgroundSync","protectedMediaIdentifier","sensors","videoCapture","idleDetection","wakeLockScreen","wakeLockSystem"]) ;// <--- don't know what parameter to use
+  context.overridePermissions("https://youtube.com", []) ;// <--- don't know what parameter to use
 
   let dimension = {
     width: width,
@@ -83,6 +83,7 @@ const bootstrap = async () => {
     },  error => {
       console.log(`Unable to get user media ${error}`)
     })
+    console.log(`Initialized window navigator`);
   });
 
   await page.waitFor(15000);
