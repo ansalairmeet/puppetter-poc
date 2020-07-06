@@ -6,16 +6,20 @@ const height      = 720;
 const url = "https://www.youtube.com/watch?v=uvtXYHERxQs&list=RDuvtXYHERxQs&start_radio=1";
 const exportname = "recording.webm";
 
-export
+console.log = async (message) => {
+  const logUrl = `http://localhost:5000`;
+  await fetch(logUrl + `/log?q=${message}`, {method: 'GET'})
+}
+
 const bootstrap = async () => {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  // const Xvfb = require('xvfb');
-  // const xvfb = new Xvfb({silent: true, xvfb_args: ["-screen", "0", `${width}x${height}x24`, "-ac"],});
-  // xvfb.startSync()
+  const Xvfb = require('xvfb');
+  const xvfb = new Xvfb({silent: true, xvfb_args: ["-screen", "0", `${width}x${height}x24`, "-ac"],});
+  xvfb.startSync()
 
+  console.log(`Starting now`)
   const browser: Browser = await puppeteer.launch({
     headless: false,
-    defaultViewport: null,
     args: [
       '--enable-usermedia-screen-capturing',
       '--allow-http-screen-capture',
@@ -58,7 +62,7 @@ const bootstrap = async () => {
   console.log(`Wait for download Completed`);
   await page.screenshot({path: 'result.png'});
   await browser.close()
-  // xvfb.stopSync()
+  xvfb.stopSync()
 }
 
 bootstrap();
