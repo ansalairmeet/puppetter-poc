@@ -39,7 +39,7 @@ const bootstrap = async () => {
       await fetch(logUrl + `/log?q=${message}`, {method: 'GET'})
     }
 
-    navigator.webkitGetUserMedia({
+    navigator.mediaDevices.getDisplayMedia({
       audio: false,
       video: {
         mandatory: {
