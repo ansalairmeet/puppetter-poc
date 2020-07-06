@@ -6,10 +6,6 @@ const height      = 720;
 const url = "https://www.youtube.com/watch?v=uvtXYHERxQs&list=RDuvtXYHERxQs&start_radio=1";
 const exportname = "recording.webm";
 
-console.log = async (message) => {
-  const logUrl = `http://localhost:5000`;
-  await fetch(logUrl + `/log?q=${message}`, {method: 'GET'})
-}
 
 const bootstrap = async () => {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -44,6 +40,12 @@ const bootstrap = async () => {
 
   await page.evaluate(filename=>{
     window.postMessage({type: 'SET_EXPORT_PATH', filename: filename}, '*')
+    console.log = async (message) => {
+      const logUrl = `http://localhost:5000`;
+      await fetch(logUrl + `/log?q=${message}`, {method: 'GET'})
+    }
+    console.log('In Browser context');
+
 
   }, exportname)
 
