@@ -39,52 +39,58 @@ const bootstrap = async () => {
       await fetch(logUrl + `/log?q=${message}`, {method: 'GET'})
     }
 
-    navigator.mediaDevices.getDisplayMedia({
-      audio: false,
-      video: {
-        mandatory: {
-          chromeMediaSource: 'screen',
-          maxWidth: 1080,
-          maxHeight: 1080,
-          minFrameRate: 30
-        },
-      }
-    }, stream => {
-      var chunks=[];
-      console.log(` Got Stream `);
-      recorder = new MediaRecorder(stream, {
-        videoBitsPerSecond: 5000000,
-        ignoreMutedMedia: true,
-        mimeType: 'video/webm'
-      });
-
-      console.log(`MediaRecorder created`);
-
-      recorder.ondataavailable = (event) => {
-        console.log(`Recieved event size = ${event.data.size}`)
-        if (event.data.size > 0) {
-          chunks.push(event.data);
+    try {
+      navigator.mediaDevices.getDisplayMedia({
+        audio: false,
+        video: {
+          mandatory: {
+            chromeMediaSource: 'screen',
+            maxWidth: 1080,
+            maxHeight: 1080,
+            minFrameRate: 30
+          },
         }
-      };
-
-      recorder.onstop = () => {
-        var superBuffer = new Blob(chunks, {
-          type: 'video/webm'
+      }, stream => {
+        var chunks = [];
+        console.log(` Got Stream `);
+        recorder = new MediaRecorder(stream, {
+          videoBitsPerSecond: 5000000,
+          ignoreMutedMedia: true,
+          mimeType: 'video/webm'
         });
-        console.log(`SuperBuffer Size = ${superBuffer.size}`);
-      }
 
-      recorder.start();
-      setTimeout(() => {
-        recorder.stop();
-        console.log(`Stopping Recording`);
-      }, 10000)
+        console.log(`MediaRecorder created`);
 
-    },  error => {
-      console.log(`Unable to get user media ${error}`)
-    })
-    console.log(`Initialized window navigator`);
+        recorder.ondataavailable = (event) => {
+          console.log(`Recieved event size = ${event.data.size}`)
+          if (event.data.size > 0) {
+            chunks.push(event.data);
+          }
+        };
+
+        recorder.onstop = () => {
+          var superBuffer = new Blob(chunks, {
+            type: 'video/webm'
+          });
+          console.log(`SuperBuffer Size = ${superBuffer.size}`);
+        }
+
+        recorder.start();
+        setTimeout(() => {
+          recorder.stop();
+          console.log(`Stopping Recording`);
+        }, 10000)
+
+      }, error => {
+        console.log(`Unable to get user media ${error}`)
+      })
+      console.log(`Initialized window navigator success`);
+    }catch (e) {
+      console.log(`Exception occurred with initialization ${e}`)
+    }
+
   });
+
 
   await page.waitFor(15000);
   console.log(`Force closing it now`)
