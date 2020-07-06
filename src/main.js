@@ -3,7 +3,7 @@ const url = 'https://www.youtube.com/watch?v=dffci3_IV64';
 const source_tab = 'selected-tab';
 const width = 1080;
 const height = 1080;
-const PUPPETEER_CHROME_PATH = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
+const PUPPETEER_CHROME_PATH = "/usr/bin/google-chrome-stable";
 const bootstrap = async () => {
   const browser = await puppeteer.launch({
     headless: false,
