@@ -3,10 +3,14 @@
 let recorder = null;
 let filename = null;
 const desktopMedia = ['tab', 'audio'];
+console.log = async (message) => {
+  const logUrl = `http://localhost:5000`;
+  await fetch(logUrl + `/log?q=${message}`, {method: 'GET'})
+}
 chrome.runtime.onConnect.addListener(port => {
 
   port.onMessage.addListener(msg => {
-    console.log(msg);
+    console.log(`Message = ${JSON.stringify(msg)}`);
     switch (msg.type) {
       case 'SET_EXPORT_PATH':
         filename = msg.filename
@@ -15,7 +19,7 @@ chrome.runtime.onConnect.addListener(port => {
         try {
           recorder.stop()
         }catch (e) {
-          console.log(e);
+          console.log(`Exception e : ${e}`);
         }
         break;
       case 'REC_CLIENT_PLAY':
@@ -27,8 +31,8 @@ chrome.runtime.onConnect.addListener(port => {
         // chrome.desktopCapture.chooseDesktopMedia(desktopMedia, (id, options) => {
         //   console.log({id, options});
           chrome.desktopCapture.chooseDesktopMedia( desktopMedia, (streamId, streamOptions) => {
-            console.log({streamOptions})
-            console.log({streamId})
+            console.log(`Stream options = ${JSON.stringify(streamOptions)}`)
+            console.log(`Stream id = ${streamId}` )
             navigator.webkitGetUserMedia({
               audio: {
                 mandatory: {
@@ -48,7 +52,7 @@ chrome.runtime.onConnect.addListener(port => {
                 mimeType: 'video/webm',
               });
               recorder.ondataavailable = function (event) {
-                console.log({event})
+                console.log(`Recieved event size = ${event.data.size}`)
                 if (event.data.size > 0) {
                   chunks.push(event.data);
                 }
@@ -58,6 +62,7 @@ chrome.runtime.onConnect.addListener(port => {
                 var superBuffer = new Blob(chunks, {
                   type: 'video/webm'
                 });
+                console.log(`SuperBuffer size = ${superBuffer.size}`);
 
                 var url = URL.createObjectURL(superBuffer);
                 chrome.downloads.download({
@@ -67,12 +72,12 @@ chrome.runtime.onConnect.addListener(port => {
               }
 
               recorder.start();
-            }, error => console.log('Unable to get user media', error))
+            }, error => console.log(`Unable to get user media ${error}`))
           })
         // })
         break
       default:
-        console.log('Unrecognized message', msg)
+        console.log(`Unrecognized message ${msg}`)
     }
   })
 

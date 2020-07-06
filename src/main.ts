@@ -9,9 +9,9 @@ const exportname = "recording.webm";
 export
 const bootstrap = async () => {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const Xvfb = require('xvfb');
-  const xvfb = new Xvfb({silent: true, xvfb_args: ["-screen", "0", `${width}x${height}x24`, "-ac"],});
-  xvfb.startSync()
+  // const Xvfb = require('xvfb');
+  // const xvfb = new Xvfb({silent: true, xvfb_args: ["-screen", "0", `${width}x${height}x24`, "-ac"],});
+  // xvfb.startSync()
 
   const browser: Browser = await puppeteer.launch({
     headless: false,
@@ -25,8 +25,8 @@ const bootstrap = async () => {
       '--disable-infobars',
       '--force-device-scale-factor=1',
       '--no-sandbox',
-      '--start-fullscreen',
-      '--display='+xvfb._display
+      // '--start-fullscreen',
+      // '--display='+xvfb._display
     ]
   });
   const page: Page = (await browser.pages())[0];
@@ -58,7 +58,7 @@ const bootstrap = async () => {
   console.log(`Wait for download Completed`);
   await page.screenshot({path: 'result.png'});
   await browser.close()
-  xvfb.stopSync()
+  // xvfb.stopSync()
 }
 
 bootstrap();
