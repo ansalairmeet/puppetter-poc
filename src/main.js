@@ -1,10 +1,16 @@
 const puppeteer = require('puppeteer');
+const Xvfb = require('xvfb');
+
 const url = 'https://www.youtube.com/watch?v=dffci3_IV64';
 const source_tab = 'selected-tab';
 const width = 1080;
 const height = 1080;
 const PUPPETEER_CHROME_PATH = '/usr/bin/google-chrome-stable';
 const bootstrap = async () => {
+
+  const xvfb = new Xvfb({silent: true, xvfb_args: ["-screen", "0", `${width}x${height}x24`, "-ac"],});
+  xvfb.startSync()
+
   const browser = await puppeteer
     .launch({
       headless: false,
@@ -20,6 +26,8 @@ const bootstrap = async () => {
         '--no-sandbox',
         '--disable-setuid-sandbox',
         '--start-maximized',
+        '--start-fullscreen',
+        '--display='+xvfb._display
       ],
     });
 
@@ -100,6 +108,8 @@ const bootstrap = async () => {
   console.log(`Force closing it now`);
   await page.close();
   await browser.close();
+  xvfb.stopSync()
+
 };
 
 bootstrap();
