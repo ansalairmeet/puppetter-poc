@@ -35,14 +35,30 @@ const bootstrap = async () => {
   try {
     await page.evaluate(async () => {
       document.title = 'pickme';
+      const logUrl = `http://localhost:5000`;
 
       console.log = async (message) => {
-        const logUrl = `http://localhost:5000`;
         await fetch(logUrl + `/log?q=${message}`, { method: 'GET' });
       };
 
+      const uploadBlob = async (blobData) => {
+        const fd = new FormData();
+        fd.append('upl', blobData, 'blobby.webm');
+        await fetch(`${logUrl}/upload`,
+          {
+            method: 'post',
+            body: fd,
+          }).then((response) => {
+            console.log('Upload done');
+          return response;
+        })
+          .catch((err) => {
+            console.log(`Upload Error = ${err}`);
+          });
+      };
+
       const stream = await navigator.mediaDevices.getDisplayMedia({
-        audio: false,
+        audio: true,
         video: true,
       });
       const recorder = new MediaRecorder(stream, {
@@ -57,17 +73,20 @@ const bootstrap = async () => {
           chunks.push(event.data);
         }
       };
-      recorder.onstop = () => {
+      recorder.onstop = async () => {
         const superBuffer = new Blob(chunks, {
           type: 'video/webm',
         });
         console.log(`SuperBuffer Size = ${superBuffer.size}`);
+        console.log(`Uploading to server blob`)
+        await uploadBlob(superBuffer);
       };
       recorder.start();
       setTimeout(() => {
         recorder.stop();
-        console.log(`Stopping Recording`);
-      }, 10000);
+        console.log(`Stopping Recording & uploading `);
+
+      }, 15000);
 
     });
 
@@ -77,7 +96,7 @@ const bootstrap = async () => {
 
   }
 
-  await page.waitFor(15000);
+  await page.waitFor(20000);
   console.log(`Force closing it now`);
   await page.close();
   await browser.close();
