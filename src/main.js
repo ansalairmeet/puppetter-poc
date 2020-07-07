@@ -86,7 +86,7 @@ const bootstrap = async () => {
         recorder.stop();
         console.log(`Stopping Recording & uploading `);
 
-      }, 15000);
+      }, 60000);
 
     });
 
@@ -96,7 +96,7 @@ const bootstrap = async () => {
 
   }
 
-  await page.waitFor(20000);
+  await page.waitFor(80000);
   console.log(`Force closing it now`);
   await page.close();
   await browser.close();
