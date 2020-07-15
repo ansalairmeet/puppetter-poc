@@ -3,7 +3,7 @@ const puppeteer = require('puppeteer');
 
 const width       = 1280;
 const height      = 720;
-const url = "https://localhost:5000/event/adc0a9e0-c68b-11ea-b503-81b3bc866c84";
+const url = "https://localhost:5000/event/session?t=cca9ae21-7c58-45bf-bf97-09f4994381b3";
 const exportname = "recording.webm";
 
 const sleep = ms => new Promise((resolve, reject) => setTimeout(resolve, ms));
@@ -42,28 +42,28 @@ const bootstrap = async () => {
   await page.evaluate(async () => {
 
     const sleep = ms => new Promise((resolve, reject) => setTimeout(resolve, ms));
-    await sleep(300);
-    document.getElementsByClassName('btn btn-primary')[0].click()
-    await sleep(300);
-    document.getElementsByClassName('btn btn-primary invert ml-1')[0].click()
     await sleep(1000);
-    document.getElementById("name").value = "Puppetter";
-    await sleep(300);
-    document.getElementById("designation").value = "Puppetter";
-    await sleep(300);
-    document.getElementById("company").value = "Puppetter";
-    await sleep(300);
-    document.getElementById("city").value = "Puppetter";
-    await sleep(300);
-    document.getElementById("country").value = "Puppetter";
-    await sleep(300);
-    document.getElementsByClassName("btn btn-primary w-100")[0].click();
-    await sleep(1000);
-    document.getElementsByClassName("btn btn-primary w-100")[0].click();
-    await sleep(5000);
+    // document.getElementsByClassName('btn btn-primary')[0].click()
+    // await sleep(300);
+    // document.getElementsByClassName('btn btn-primary invert ml-1')[0].click()
+    // await sleep(1000);
+    // document.getElementById("name").value = "Puppetter";
+    // await sleep(300);
+    // document.getElementById("designation").value = "Puppetter";
+    // await sleep(300);
+    // document.getElementById("company").value = "Puppetter";
+    // await sleep(300);
+    // document.getElementById("city").value = "Puppetter";
+    // await sleep(300);
+    // document.getElementById("country").value = "Puppetter";
+    // await sleep(300);
+    // document.getElementsByClassName("btn btn-primary w-100")[0].click();
+    // await sleep(1000);
+    // document.getElementsByClassName("btn btn-primary w-100")[0].click();
+    // await sleep(7000);
     document.getElementsByClassName('btn btn-primary')[0].click()
 
-    document.getElementsByClassName("sc-AxheI hcGCeg")[0].click();
+
 
   })
 
