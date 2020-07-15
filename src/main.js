@@ -3,7 +3,7 @@ const puppeteer = require('puppeteer');
 
 const width       = 1280;
 const height      = 720;
-const url = "https://localhost:5000/e/5628f6c0-b785-11ea-8bdb-eb6bc0c52500";
+const url = "https://localhost:5000/event/adc0a9e0-c68b-11ea-b503-81b3bc866c84";
 const exportname = "recording.webm";
 
 const sleep = ms => new Promise((resolve, reject) => setTimeout(resolve, ms));
@@ -14,7 +14,7 @@ const bootstrap = async () => {
   // xvfb.startSync()
 
   const browser = await puppeteer.launch({
-    headless: true,
+    headless: false,
     defaultViewport: null,
     ignoreHTTPSErrors: true,
     args: [
@@ -26,6 +26,7 @@ const bootstrap = async () => {
       // '--load-extension=' + __dirname,
       // '--disable-extensions-except=' + __dirname,
       '--disable-infobars',
+      '--use-fake-ui-for-media-stream',
       '--force-device-scale-factor=1',
       '--no-sandbox'
     ]
@@ -59,16 +60,17 @@ const bootstrap = async () => {
     document.getElementsByClassName("btn btn-primary w-100")[0].click();
     await sleep(1000);
     document.getElementsByClassName("btn btn-primary w-100")[0].click();
-    await sleep(15000);
+    await sleep(5000);
+    document.getElementsByClassName('btn btn-primary')[0].click()
 
     document.getElementsByClassName("sc-AxheI hcGCeg")[0].click();
 
   })
 
-  await page.waitFor(5000);
+  // await page.waitFor(5000);
 
-  console.log(`Inside the stream downloading`);
-
+  // console.log(`Inside the stream downloading`);
+/*
   const { streamIds, streams, blob } = await page.evaluate(async (args) => {
     const elements = document.getElementsByTagName("video");
     const streams = [];
@@ -119,15 +121,11 @@ const bootstrap = async () => {
     return {streamIds, streams, blob};
 
   });
+*/
 
-  console.log({streams});
-  console.log({blob});
-  console.log({outStreams: streamIds})
-
-  await page.waitFor(300000);
+  await page.waitFor(3000000);
 
   console.log(`Wait for download Completed`);
-  await page.screenshot({path: 'result.png'});
   await browser.close()
   // xvfb.stopSync()
 }
