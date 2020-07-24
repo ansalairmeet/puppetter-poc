@@ -8,24 +8,7 @@ const url = "https://test12.airmeet.com/event/session?t=29728e39-b1f8-466a-b61b-
 
 const bootstrap = async () => {
 
-  const browser = await puppeteer.launch({
-    headless: true,
-    defaultViewport: null,
-    ignoreHTTPSErrors: true,
-    args: [
-      '--disable-notifications',
-      '--use-fake-ui-for-media-stream',
-      '--enable-usermedia-screen-capturing',
-      '--allow-http-screen-capture',
-      '--auto-select-desktop-capture-source=puppetcam',
-      // '--load-extension=' + __dirname,
-      // '--disable-extensions-except=' + __dirname,
-      '--disable-infobars',
-      '--use-fake-ui-for-media-stream',
-      '--force-device-scale-factor=1',
-      '--no-sandbox'
-    ]
-  });
+  const browser = await puppeteer.connect({ browserWSEndpoint: 'ws://localhost:8000' });
   const page = (await browser.pages())[0];
   await page._client.send('Emulation.clearDeviceMetricsOverride')
   await page.setViewport({width: width, height: height, deviceScaleFactor: 1})
@@ -37,11 +20,11 @@ const bootstrap = async () => {
     await sleep(1000);
     // while(true) {
     //   try {
-    //     // document.getElementsByClassName('btn btn-primary')[0].click()
-    //     // break;
-    //   }catch (e) {
-    //     await sleep(1000);
-    //   }
+        document.getElementsByClassName('btn btn-primary')[0].click()
+        // break;
+      // }catch (e) {
+      //   await sleep(1000);
+      // }
     // }
     console.log("<<<<<<<<<<<<<<");
     console.log(window.airmeet);
